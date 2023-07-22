@@ -1,13 +1,14 @@
 import socket
 import pyfiglet
 import requests
-import whois
+import pythonwhois as whois
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, parse_qs
 import os
 import time
 import traceback
 from urllib.parse import quote
+
 
 text = "Sentinel  Scan"
 font = pyfiglet.Figlet()
