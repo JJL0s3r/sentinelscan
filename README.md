@@ -38,6 +38,34 @@ O script `bibliotecas.py` verificará se as bibliotecas necessárias estão inst
 
 O Sentinel Scan será iniciado e realizará uma varredura em busca de vulnerabilidades em seu sistema. Certifique-se de fornecer as informações necessárias solicitadas pelo script para que ele possa executar as verificações adequadas.
 
+## ERRO NO WHOIS
+
+Caso você for fazer uma consulta WHOIS pelo Sentinel Scan pela sua maquina e ele der o seguinte erro ou algo parecido:
+
+Traceback (most recent call last):
+  File "C:\Users\thano\sentinelscan\SentinelScan.py", line 105, in perform_whois
+    domain = whois.whois(url)
+             ^^^^^^^^^^^
+AttributeError: module 'whois' has no attribute 'whois'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\thano\sentinelscan\SentinelScan.py", line 331, in <module>
+    perform_whois(url)
+  File "C:\Users\thano\sentinelscan\SentinelScan.py", line 127, in perform_whois
+    except whois.parser.PywhoisError as e:
+           ^^^^^^^^^^^^
+AttributeError: module 'whois' has no attribute 'parser'
+
+Caso ele dê esse erro, siga os seguintes passos:
+1. Desinstale a versão atual, execute o seguinte comando em seu terminal ou prompt de comando:
+`pip uninstall python-whois` (ou) `pip uninstall whois` (ou a versão da biblioteca WHOIS que estiver instalada em sua maquina)
+
+2. Instale outra versão da biblioteca WHOIS:
+`pip install python-whois==0.7.3`
+
+(CASO O ERRO AO FAZER UMA CONSULTA WHOIS PELO SENTINEL SCAN PERSISTA, FAVOR ENTRAR EM CONTATO: (d.aaraujo.ti@gmail.com))
 ## Aviso
 
 O Sentinel Scan é uma ferramenta de segurança e, portanto, deve ser usada com responsabilidade. Verifique se você tem permissão para executar o scan em sistemas que não sejam de sua propriedade e nunca utilize essa ferramenta para fins maliciosos.
