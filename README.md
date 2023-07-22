@@ -2,7 +2,7 @@
 
 O Sentinel Scan é uma ferramenta de varredura de vulnerabilidades desenvolvida em Python. Ele verifica sistemas em busca de vulnerabilidades conhecidas e ajuda a identificar possíveis problemas de segurança.
 
-## Requisitos para usar o Sentinel Scan
+## Requisitos para usar o Sentinel Scan:
 
 Antes de executar o Sentinel Scan, verifique se você possui os seguintes requisitos em sua máquina:
 
@@ -12,7 +12,7 @@ Antes de executar o Sentinel Scan, verifique se você possui os seguintes requis
 
 3. Acesso à Internet: O Sentinel Scan requer acesso à Internet para realizar as verificações de vulnerabilidade.
 
-## Como usar o Sentinel Scan
+## Como usar o Sentinel Scan:
 
 Abra o terminal de seu computador e siga os passos abaixo para executar o Sentinel Scan em sua máquina:
 
@@ -37,6 +37,13 @@ O script `bibliotecas.py` verificará se as bibliotecas necessárias estão inst
 
 
 O Sentinel Scan será iniciado e realizará uma varredura em busca de vulnerabilidades em seu sistema. Certifique-se de fornecer as informações necessárias solicitadas pelo script para que ele possa executar as verificações adequadas.
+
+
+
+
+
+
+
 
 ## ERRO NO WHOIS
 
@@ -67,6 +74,12 @@ Caso ele dê esse erro ou algo parecido, siga os seguintes passos:
 `pip install python-whois==0.7.3`
 
 (CASO O ERRO AO FAZER UMA CONSULTA WHOIS PELO SENTINEL SCAN PERSISTA, FAVOR ENTRAR EM CONTATO: (d.aaraujo.ti@gmail.com))
+
+
+
+
+
+
 ## Aviso
 
 O Sentinel Scan é uma ferramenta de segurança e, portanto, deve ser usada com responsabilidade. Verifique se você tem permissão para executar o scan em sistemas que não sejam de sua propriedade e nunca utilize essa ferramenta para fins maliciosos.
