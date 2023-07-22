@@ -98,7 +98,7 @@ def get_subdomains(url):
     except Exception as e:
         print(f"Ocorreu um erro inesperado: {e}")
 
-
+'''
 def perform_whois(url):
     try:
         # Realiza a função do whois
@@ -124,6 +124,31 @@ def perform_whois(url):
         print("Erro ao obter informações de subdomínios. Verifique a URL e a conexão com a Internet.")
     except whois.parser.PywhoisError as e:
         print("Erro ao obter informações WHOIS. Verifique a URL e tente novamente.")
+    except Exception as e:
+        print(f"Ocorreu um erro inesperado: {e}")
+'''
+
+def perform_whois(url):
+    try:
+        # Realiza a função do whois
+        domain = whois.whois(url)
+
+        print("\n\nInformações WHOIS:\n\n")
+        print(f"Nome do domínio: {domain.domain_name}\n")
+        print(f"Subdomínios: ")
+        get_subdomains(url)
+        print(f"\nOrganização: {domain.org}\n")
+        print(f"Servidores de nome: {domain.name_servers}\n")
+        print(f"Data de criação: {domain.creation_date}\n")
+        print(f"Data de expiração: {domain.expiration_date}\n")
+        print(f"Status: {domain.status}\n")
+        print(f"Email do registrante: {domain.emails}\n")
+        print(f"País: {domain.country}\n")
+        print(f"Estado: {domain.state}\n")
+        print(f"Cidade: {domain.city}\n")
+
+    except socket.gaierror:
+        print("Erro ao obter informações de subdomínios. Verifique a URL e a conexão com a Internet.")
     except Exception as e:
         print(f"Ocorreu um erro inesperado: {e}")
 
