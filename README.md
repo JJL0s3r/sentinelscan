@@ -14,7 +14,7 @@ Antes de executar o Sentinel Scan, verifique se você possui os seguintes requis
 
 ## Como usar o Sentinel Scan
 
-Siga os passos abaixo para executar o Sentinel Scan em sua máquina:
+Abra o terminal de seu computador e siga os passos abaixo para executar o Sentinel Scan em sua máquina:
 
 1. Clone o repositório do Sentinel Scan do GitHub:
 
