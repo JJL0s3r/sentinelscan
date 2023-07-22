@@ -6,7 +6,6 @@ libraries = [
     'socket',
     'pyfiglet',
     'requests',
-    'whois',
     'python-whois',
     'beautifulsoup4',
     'importlib',
