@@ -130,6 +130,7 @@ def perform_whois(url):
         print(f"Ocorreu um erro inesperado: {e}")
 
 
+
 def check_xss(url):
     try:
         # Verifica se há vulnerabilidade de XSS
