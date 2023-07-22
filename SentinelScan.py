@@ -1,8 +1,7 @@
 import socket
 import pyfiglet
 import requests
-import pythonwhois as whois
-# import whois
+import whois
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, parse_qs
 import os
