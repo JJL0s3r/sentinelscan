@@ -44,7 +44,7 @@ O Sentinel Scan é uma ferramenta de segurança e, portanto, deve ser usada com 
 
 ## Contribuição
 
-Se você quiser contribuir com o Sentinel Scan ou relatar problemas, sinta-se à vontade para abrir uma issue ou enviar um pull request para o repositório. (e-mail = d.aaraujo.ti@gmail.com)
+Se você quiser contribuir com o Sentinel Scan ou relatar problemas, sinta-se à vontade para abrir uma issue ou enviar um pull request para o repositório. (d.aaraujo.ti@gmail.com)
 
 ## Licença
 
