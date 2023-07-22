@@ -1,14 +1,13 @@
 import socket
 import pyfiglet
 import requests
-import pythonwhois as whois
+import whois
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, parse_qs
 import os
 import time
 import traceback
 from urllib.parse import quote
-
 
 text = "Sentinel  Scan"
 font = pyfiglet.Figlet()
@@ -105,30 +104,29 @@ def perform_whois(url):
         # Realiza a função do whois
         domain = whois.whois(url)
         print("\n\nInformações WHOIS:\n\n")
-        print(f"Nome do domínio: {domain.domain_name}\n")
+        print(f"Nome do domínio: {domain.domain}\n")
         print(f"Subdomínios: ")
         get_subdomains(url)
         print(f"\nOrganização: {domain.org}\n")
-        print(f"Registrante: {domain.registrar}\n")
         print(f"Servidores de nome: {domain.name_servers}\n")
         print(f"Data de criação: {domain.creation_date}\n")
         print(f"Data de expiração: {domain.expiration_date}\n")
-        print(f"Data de atualização: {domain.updated_date}\n")
 
         # Exibe os status
-        print(f"Status: {''.join(domain.status)}")
+        print(f"Status: {', '.join(domain.status)}")
 
-        print(f"\nEmail do registrante: {domain.emails}")
-        print(f"\nPaís: {domain.country}")
-        print(f"\nEstado: {domain.state}")
-        print(f"\nCidade: {domain.city}")
-        print(f"\nEndereço: {domain.address}")
-        print(f"\nCódigo postal: {domain.zipcode}")
+        print(f"\nEmail do registrante: {', '.join(domain.emails)}")
+        print(f"\nPaís: {domain.country}\n")
+        print(f"Estado: {domain.state}\n")
+        print(f"Cidade: {domain.city}\n")
 
+    except socket.gaierror:
+        print("Erro ao obter informações de subdomínios. Verifique a URL e a conexão com a Internet.")
     except whois.parser.PywhoisError as e:
         print("Erro ao obter informações WHOIS. Verifique a URL e tente novamente.")
     except Exception as e:
         print(f"Ocorreu um erro inesperado: {e}")
+
 
 
 def check_xss(url):
