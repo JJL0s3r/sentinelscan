@@ -10,7 +10,6 @@ libraries = [
     'python-whois',
     'beautifulsoup4',
     'importlib',
-    'subprocess',
     'subprocess'
 ]
 
