@@ -59,9 +59,11 @@ AttributeError: module 'whois' has no attribute 'parser'
 
 Caso ele dê esse erro ou algo parecido, siga os seguintes passos:
 1. Desinstale a versão atual, execute o seguinte comando em seu terminal ou prompt de comando:
+
 `pip uninstall python-whois` (ou) `pip uninstall whois` (ou a versão da biblioteca WHOIS que estiver instalada em sua maquina)
 
-2. Instale outra versão da biblioteca WHOIS:
+3. Instale outra versão da biblioteca WHOIS:
+
 `pip install python-whois==0.7.3`
 
 (CASO O ERRO AO FAZER UMA CONSULTA WHOIS PELO SENTINEL SCAN PERSISTA, FAVOR ENTRAR EM CONTATO: (d.aaraujo.ti@gmail.com))
