@@ -20,6 +20,7 @@ print(banner)
 def show_commands():
     print("Comandos disponíveis:\n")
     print("'ss' or 'sentinel scan' - Exibir tela inicial\n")
+    print("'commands - Exibir comandos disponíveis'")
     print("'ss ip' - Obter o IP do servidor\n")
     print("'ss whois' - Realizar WHOIS\n")
     print("'ss -p' - Escanear todas as portas\n")
@@ -280,6 +281,8 @@ while True:
         show_commands()
     elif command == "sentinel scan":
         print(banner)
+        show_commands()
+    elif command == "commands":
         show_commands()
     elif command == "ss -v": # Verifica se há XSS, IDOR e SQLi
         url = input("Digite a URL do domínio: ")
