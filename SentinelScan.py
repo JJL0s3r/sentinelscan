@@ -28,6 +28,7 @@ def show_commands():
     print("'ss -s' - Verificar vulnerabilidade de SQL injection\n")
     print("'ss -i' - Verificar vulnerabilidade de IDOR\n")
     print("'ss -v' - Verificar se há vulnerabilidade XSS, IDOR e SQL injection\n")
+    print("'ss dir -w (wordlist)' - Testar possíveis diretórios do site usando uma wordlist\n")
     print("'info' - Mostrar informações sobre o programa\n")
     print("'clear' - Limpar a tela\n")
     print("'exit' - Sair\n\n\n")
@@ -80,6 +81,28 @@ def get_subdomains(url):
         print("Erro ao obter informações de subdomínios. Verifique a URL e a conexão com a Internet.")
     except Exception as e:
         print(f"Ocorreu um erro inesperado: {e}")
+
+def dir_scan(url, wordlist):
+    try:
+        # Carrega a wordlist e lê as linhas com os possíveis diretórios
+        with open(wordlist, 'r') as file:
+            directories = file.read().splitlines()
+
+        # Loop através dos possíveis diretórios e verifica se eles existem
+        for directory in directories:
+            full_url = url + "/" + directory
+            response = requests.get(full_url)
+            if response.status_code == 200:
+                print(f"Diretório encontrado: {full_url}")
+            else:
+                print(f"Diretório não encontrado: {full_url}")
+    except requests.exceptions.RequestException as e:
+        print("Erro ao fazer a requisição. Verifique a URL e a conexão com o servidor.")
+    except FileNotFoundError:
+        print(f"Arquivo '{wordlist}' não encontrado.")
+    except Exception as e:
+        print(f"Ocorreu um erro inesperado: {e}")
+
 
 
 def get_subdomains(url):
@@ -279,11 +302,14 @@ while True:
     elif command == "ss":
         print(banner)
         show_commands()
+
     elif command == "sentinel scan":
         print(banner)
         show_commands()
+
     elif command == "commands":
         show_commands()
+
     elif command == "ss -v": # Verifica se há XSS, IDOR e SQLi
         url = input("Digite a URL do domínio: ")
         print("Escaneando vulnerabilidades (XSS, IDOR e SQLi)... ")
@@ -298,56 +324,63 @@ while True:
         check_idor(url)
         print("\n\n")
 
-
     elif command == "clear":
         if os.name == "posix":
             os.system("clear")  # Limpa a tela no Linux/macOS
         else:
             os.system("cls")  # Limpa a tela no Windows
-    
+
     elif command.startswith("ss"):
-        if command == "ss -p":
-            url = input("Digite a URL que deseja escanear: ")
-            print("Escaneando todas as portas...")
-            scan_ports(url, range(1, 65536))
-        elif command.startswith("ss "):
-            command_parts = command.split()
+        command_parts = command.split()
 
-    
+        if len(command_parts) >= 2:
+            subcommand = command_parts[1]
 
-   
-            
-            
-            if len(command_parts) >= 2:
-                subcommand = command_parts[1]
-                if subcommand.isdigit():
-                    url = input("Digite a URL que deseja escanear: ")
-                    ports = [int(port) for port in subcommand.split(",")]
-                    print("Escaneando portas específicas...")
-                    scan_ports(url, ports)
-                elif subcommand == "ip":
-                    url = input("Digite a URL do servidor: ")
-                    get_server_ip(url)
-                elif subcommand == "whois":
-                    url = input("Digite a URL do domínio: ")
-                    perform_whois(url)
-                elif subcommand == "-x":
-                    url = input("Digite a URL do site: ")
-                    check_xss(url)
-                elif subcommand == "-s":
-                    url = input("Digite a URL do site: ")
-                    check_sql_injection(url)
-                elif subcommand == "-i":
-                    url = input("Digite a URL do site: ")
-                    check_idor(url)
-                else:
-                    print("Comando inválido. Por favor, tente novamente.")
+            if subcommand == "-p":
+                url = input("Digite a URL que deseja escanear: ")
+                print("Escaneando todas as portas...")
+                scan_ports(url, range(1, 65536))
+
+            elif subcommand.isdigit():
+                url = input("Digite a URL que deseja escanear: ")
+                ports = [int(port) for port in subcommand.split(",")]
+                print("Escaneando portas específicas...")
+                scan_ports(url, ports)
+
+            elif subcommand == "ip":
+                url = input("Digite a URL do servidor: ")
+                get_server_ip(url)
+
+            elif subcommand == "whois":
+                url = input("Digite a URL do domínio: ")
+                perform_whois(url)
+
+            elif subcommand == "-x":
+                url = input("Digite a URL do site: ")
+                check_xss(url)
+
+            elif subcommand == "-s":
+                url = input("Digite a URL do site: ")
+                check_sql_injection(url)
+
+            elif subcommand == "-i":
+                url = input("Digite a URL do site: ")
+                check_idor(url)
+
+            elif subcommand == "dir":  # Alteração aqui
+                wordlist_path = input("Digite o caminho da wordlist: ")
+                url = input("Digite a URL do site: ")
+                print("Escaneando diretórios...")
+                dir_scan(url, wordlist_path)
+
             else:
                 print("Comando inválido. Por favor, tente novamente.")
-                
-            
-                
+
+        else:
+            print("Comando inválido. Por favor, tente novamente.")
+
     elif command == "exit":
         break
+
     else:
         print("Comando inválido. Por favor, tente novamente.")
