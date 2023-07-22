@@ -44,7 +44,7 @@ Caso você for fazer uma consulta WHOIS pelo Sentinel Scan pela sua maquina e el
 
 Traceback (most recent call last):
 
-  File "C:\Users\thano\sentinelscan\SentinelScan.py", line 105, in perform_whois
+  File "C:\Users\[NOME DO SEU USER]\sentinelscan\SentinelScan.py", line 105, in perform_whois
     domain = whois.whois(url)
              ^^^^^^^^^^^
 AttributeError: module 'whois' has no attribute 'whois'
