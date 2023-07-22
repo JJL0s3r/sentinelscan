@@ -26,14 +26,14 @@ Abra o terminal de seu computador e siga os passos abaixo para executar o Sentin
 
 3. Instale as bibliotecas necessárias executando o seguinte comando:
 
-`python3 bibliotecas.py`
+`python bibliotecas.py` ou `python3 bibliotecas.py`
 
 
 O script `bibliotecas.py` verificará se as bibliotecas necessárias estão instaladas em sua máquina e, se não estiverem, as instalará automaticamente.
 
 4. Execute o Sentinel Scan com o seguinte comando:
 
-`python3 SentinelScan.py`
+`python SentinelScan.py` ou `python3 SentinelScan.py`
 
 
 O Sentinel Scan será iniciado e realizará uma varredura em busca de vulnerabilidades em seu sistema. Certifique-se de fornecer as informações necessárias solicitadas pelo script para que ele possa executar as verificações adequadas.
