@@ -41,9 +41,9 @@ O Sentinel Scan será iniciado e realizará uma varredura em busca de vulnerabil
 ## ERRO NO WHOIS
 
 Caso você for fazer uma consulta WHOIS pelo Sentinel Scan pela sua maquina e ele der o seguinte erro ou algo parecido:
--
--
--
+|
+|
+|
 Traceback (most recent call last):
   File "C:\Users\thano\sentinelscan\SentinelScan.py", line 105, in perform_whois
     domain = whois.whois(url)
@@ -58,9 +58,9 @@ Traceback (most recent call last):
     except whois.parser.PywhoisError as e:
            ^^^^^^^^^^^^
 AttributeError: module 'whois' has no attribute 'parser'
--
--
--
+|
+|
+|
 Caso ele dê esse erro, siga os seguintes passos:
 1. Desinstale a versão atual, execute o seguinte comando em seu terminal ou prompt de comando:
 `pip uninstall python-whois` (ou) `pip uninstall whois` (ou a versão da biblioteca WHOIS que estiver instalada em sua maquina)
