@@ -367,12 +367,19 @@ while True:
                 url = input("Digite a URL do site: ")
                 check_idor(url)
 
-            elif subcommand == "dir":  # Alteração aqui
-                wordlist_path = input("Digite o caminho da wordlist: ")
-                url = input("Digite a URL do site: ")
-                print("Escaneando diretórios...")
-                dir_scan(url, wordlist_path)
-
+            elif subcommand == "dir":
+                # Verifica se a opção -w e o caminho da wordlist estão no comando
+                if "-w" in command_parts:
+                    wordlist_index = command_parts.index("-w") + 1
+                    if len(command_parts) > wordlist_index:
+                        wordlist_path = command_parts[wordlist_index]
+                        url = input("Digite a URL do site: ")
+                        print("Escaneando diretórios...")
+                        dir_scan(url, wordlist_path)
+                    else:
+                        print("Caminho da wordlist não informado. Por favor, insira o caminho completo da wordlist após a opção -w.")
+                else:
+                    print("Comando inválido. Por favor, informe a opção -w seguida do caminho da wordlist.")
             else:
                 print("Comando inválido. Por favor, tente novamente.")
 
