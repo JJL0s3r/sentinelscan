@@ -49,7 +49,9 @@ Traceback (most recent call last):
 AttributeError: module 'whois' has no attribute 'whois'
 
 During handling of the above exception, another exception occurred:
-
+ㅤ
+ㅤ
+ㅤ
 Traceback (most recent call last):
   File "C:\Users\thano\sentinelscan\SentinelScan.py", line 331, in <module>
     perform_whois(url)
@@ -57,7 +59,9 @@ Traceback (most recent call last):
     except whois.parser.PywhoisError as e:
            ^^^^^^^^^^^^
 AttributeError: module 'whois' has no attribute 'parser'
-
+ㅤ
+ㅤ
+ㅤ
 Caso ele dê esse erro, siga os seguintes passos:
 1. Desinstale a versão atual, execute o seguinte comando em seu terminal ou prompt de comando:
 `pip uninstall python-whois` (ou) `pip uninstall whois` (ou a versão da biblioteca WHOIS que estiver instalada em sua maquina)
