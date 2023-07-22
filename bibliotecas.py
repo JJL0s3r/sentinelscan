@@ -6,7 +6,7 @@ libraries = [
     'socket',
     'pyfiglet',
     'requests',
-    'python-whois-extended',
+    'whois',
     'beautifulsoup4',
     'importlib',
     'subprocess',
