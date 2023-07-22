@@ -1,23 +1,18 @@
-
 # Sentinel Scan
 
 O Sentinel Scan é uma ferramenta de varredura de vulnerabilidades desenvolvida em Python. Ele verifica sistemas em busca de vulnerabilidades conhecidas e ajuda a identificar possíveis problemas de segurança.
 
-## Requisitos para usar o Sentinel Scan:
+## Requisitos para usar o Sentinel Scan
 
 Antes de executar o Sentinel Scan, verifique se você possui os seguintes requisitos em sua máquina:
 
-1. Python: O Sentinel Scan é um script Python, portanto, você precisará ter o Python instalado em sua máquina. O código foi escrito para o Python 3.x, então certifique-se de usar uma versão recente do Python 3.
+1. Python: O Sentinel Scan é um script Python, portanto, você precisará ter o Python instalado em sua máquina. Se você ainda não tem o Python instalado, você pode baixá-lo em [python.org](https://www.python.org/downloads/) e seguir as instruções de instalação para o seu sistema operacional.
 
-2. Pacote `pip`: O `pip` é o gerenciador de pacotes do Python e geralmente é instalado automaticamente junto com o Python. Verifique se você tem o `pip` instalado corretamente executando o seguinte comando no terminal ou prompt de comando:
-
-`pip --version`
-
+2. Pacote `pip`: O `pip` é o gerenciador de pacotes do Python e geralmente é instalado automaticamente junto com o Python. Se o `pip` não estiver instalado, você pode baixá-lo e instalá-lo seguindo o guia oficial [aqui](https://pip.pypa.io/en/stable/installing/).
 
 3. Acesso à Internet: O Sentinel Scan requer acesso à Internet para realizar as verificações de vulnerabilidade.
 
-
-## Como usar o Sentinel Scan:
+## Como usar o Sentinel Scan
 
 Siga os passos abaixo para executar o Sentinel Scan em sua máquina:
 
