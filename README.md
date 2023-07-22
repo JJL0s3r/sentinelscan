@@ -38,7 +38,7 @@ O script `bibliotecas.py` verificará se as bibliotecas necessárias estão inst
 
 4. Execute o Sentinel Scan com o seguinte comando:
 
-`python sentinelscan.py`
+`python3 sentinelscan.py`
 
 
 O Sentinel Scan será iniciado e realizará uma varredura em busca de vulnerabilidades em seu sistema. Certifique-se de fornecer as informações necessárias solicitadas pelo script para que ele possa executar as verificações adequadas.
