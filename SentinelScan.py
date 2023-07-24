@@ -29,12 +29,13 @@ def show_commands():
     print("'ss -i' - Verificar vulnerabilidade de IDOR\n")
     print("'ss -v' - Verificar se há vulnerabilidade XSS, IDOR e SQL injection\n")
     print("'ss dir -w (wordlist)' - Testar possíveis diretórios do site usando uma wordlist\n")
+    print("'ss dir -p' - Testar possíveis diretórios pré-definidos\n")
     print("'ss -e -M' - Explorar vulnerabilidade (SQLi)")
     print("'info' - Mostrar informações sobre o programa\n")
     print("'clear' - Limpar a tela\n")
     print("'exit' - Sair\n\n\n")
     
-    print("Se caso na hora de fazer o scan, der algum erro quando você informa a url, tente iniciar o script novamente e colocar sem 'http' ou 'https' ou adiciona-los\n")
+    print("Se caso na hora de fazer o scan, der algum erro quando você informa a url, tente iniciar o script novamente e colocar sem 'http' ou 'https' \n")
 
 show_commands()
 
@@ -101,6 +102,68 @@ def dir_scan(url, wordlist):
         print("Erro ao fazer a requisição. Verifique a URL e a conexão com o servidor.")
     except FileNotFoundError:
         print(f"Arquivo '{wordlist}' não encontrado.")
+    except Exception as e:
+        print(f"Ocorreu um erro inesperado: {e}")
+
+
+
+def predefined_dir_scan(url):
+    try:
+        # Lista de possíveis diretórios
+        directories = [
+            "admin", "login", "index.html", "index.php", 
+            "script.py", "login.php", "instagram", "config", "backup", "test",
+            "data", "uploads", "images", "assets", "media",
+            "css", "js", "fonts", "docs", "downloads",
+            "lib", "include", "cgi-bin", "tmp", "backup",
+            "db", "secret", "private", "public", "log",
+            "error", "cache", "temp", "uploads", "config",
+            "backup", "old", "temp", "temporary", "backup",
+            "img", "upload", "uploads", "backup", "temp",
+            "temporary", "secure", "adminpanel", "adm", "system",
+            "cfg", "config", "setup", "install", "setup",
+            "phpinfo", "readme", "license", "phpmyadmin", "pma",
+            "mysql", "database", "sql", "backup", "db",
+            "database_backup", "test", "demo", "example", "samples",
+            "doc", "documentation", "download", "downloads",
+            "img", "image", "images", "photo", "photos",
+            "css", "style", "styles", "stylesheet", "static",
+            "js", "javascript", "script", "scripts", "jslib",
+            "lib", "library", "src", "source", "inc",
+            "include", "includes", "res", "resources", "dist",
+            "public", "public_html", "web", "webroot", "html",
+            "log", "logs", "tmp", "temp", "cache",
+            "backup", "config", "conf", "private", "data",
+            "upload", "uploads", "file", "files", "media",
+            "test", "demo", "example", "examples", "test",
+            "temp", "backup", "backup_files", "assets", "resource",
+            "resources", "secret", "hidden", "login", "admin",
+            "adm", "administrator", "sysadmin", "system", "login",
+            "auth", "authentication", "session", "sessions", "signin",
+            "signout", "signup", "register", "users", "user",
+            "accounts", "account", "profile", "myaccount", "myaccount",
+            "manage", "adminpanel", "panel", "control", "cp",
+            "dashboard", "config", "configuration", "install", "setup",
+            "phpinfo", "readme", "license", "error", "errors",
+            "404", "403", "500", "error_log", "debug",
+            "logs", "temp", "temporary", "tmp", "cache",
+            "uploads", "backup", "phpmyadmin", "pma", "mysql",
+            "database", "db", "sql", "backup", "database_backup",
+            "cgi-bin", "cgi-bin2", "scripts", "html", "htdocs",
+            "public", "public.html", "www", "files", "uploads",
+            "images", "img", "documents", "downloads", "upload", "style.css", "cpanel"
+        ]
+
+        # Loop através dos possíveis diretórios e verifica se eles existem
+        for directory in directories:
+            full_url = url + "/" + directory
+            response = requests.get(full_url)
+            if response.status_code == 200:
+                print(f"Diretório encontrado: {full_url}")
+            else:
+                print(f"Diretório não encontrado: {full_url}")
+    except requests.exceptions.RequestException as e:
+        print("Erro ao fazer a requisição. Verifique a URL e a conexão com o servidor.")
     except Exception as e:
         print(f"Ocorreu um erro inesperado: {e}")
 
@@ -449,7 +512,11 @@ while True:
                 url = input("Digite a URL do site: ")
                 check_idor(url)
           
-                
+            elif command == "ss dir -p":
+                # Opção para testar 500 possíveis diretórios pré-definidos
+                url = input("Digite a URL do site: ")
+                print("Escaneando 500 possíveis diretórios...")
+                predefined_dir_scan(url)
 
             elif subcommand == "dir":
                 # Verifica se a opção -w e o caminho da wordlist estão no comando
