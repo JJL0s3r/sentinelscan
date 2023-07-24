@@ -10,6 +10,7 @@ libraries = [
     'beautifulsoup4',
     'importlib',
     'subprocess',
+    'psutil',
     'subprocess'
 ]
 
