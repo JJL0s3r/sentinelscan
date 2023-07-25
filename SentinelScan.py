@@ -3,11 +3,13 @@ import pyfiglet
 import requests
 import whois
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, quote
 import os
 import time
-import traceback
-from urllib.parse import quote
+from ipwhois import IPWhois
+import nmap
+import netifaces
+from scapy.all import ARP, Ether, srp
 
 text = "Sentinel  Scan"
 font = pyfiglet.Figlet()
@@ -20,7 +22,7 @@ print(banner)
 def show_commands():
     print("Comandos disponíveis:\n")
     print("'ss' or 'sentinel scan' - Exibir tela inicial\n")
-    print("'commands - Exibir comandos disponíveis'\n")
+    print("'commands' - Exibir comandos disponíveis'\n")
     print("'ss ip' - Obter o IP do servidor\n")
     print("'ss whois' - Realizar WHOIS\n")
     print("'ss -p' - Escanear todas as portas\n")
@@ -32,6 +34,7 @@ def show_commands():
     print("'ss dir -p' - Testar possíveis diretórios pré-definidos\n")
     print("'ss -e -M' - Explorar vulnerabilidade (SQLi)\n")
     print("'info' - Mostrar informações sobre o programa\n")
+    print("'ss --w -I' - Obter todos os IPs conectados na rede Wi-Fi e informações dos dispositivos\n")
     print("'clear' - Limpar a tela\n")
     print("'exit' - Sair\n\n\n")
     
@@ -39,6 +42,63 @@ def show_commands():
 
 show_commands()
 
+
+def obter_ip_local():
+    try:
+        nome_do_host = socket.gethostname()
+        ip_local = socket.gethostbyname(nome_do_host)
+        return ip_local
+    except Exception as endereco:
+        print(f"Erro ao obter o endereço IP local: {endereco}")
+        return None
+
+def get_wifi_ips():
+    try:
+        # Obtém o endereço IP local da rede Wi-Fi
+        iface = netifaces.gateways()['default'][netifaces.AF_INET][1]
+        ip = netifaces.ifaddresses(iface)[netifaces.AF_INET][0]['addr']
+
+        # Faz uma varredura na rede para encontrar os IPs dos dispositivos conectados
+        nm = nmap.PortScanner()
+        nm.scan(hosts=f"{ip}/24", arguments='-F')  # Escaneia a rede usando apenas as 100 portas mais comuns
+        hosts_list = [(x, nm[x]['status']['state']) for x in nm.all_hosts()]  # Lista de tuplas (IP, status)
+
+        # Filtra apenas os IPs que estão com status 'up'
+        up_hosts = [ip for ip, status in hosts_list if status == 'up']
+
+        return up_hosts
+    except Exception as e:
+        print(f"Ocorreu um erro ao obter os IPs da rede Wi-Fi: {e}")
+        return []
+
+def get_os_version(ip):
+    try:
+        # Faz uma consulta WHOIS para obter informações do IP
+        obj = IPWhois(ip)
+        results = obj.lookup_rdap()
+
+        # Obtém informações do sistema operacional e a versão
+        os_version = results.get('asn_description', 'Desconhecido')
+        return os_version
+    except Exception as e:
+        print(f"Ocorreu um erro ao obter informações do sistema operacional: {e}")
+        return 'Desconhecido'
+
+def get_device_type(os_version):
+    # Algumas palavras-chave para identificar o tipo de dispositivo
+    if 'android' in os_version.lower():
+        return 'Celular'
+    elif 'iphone' in os_version.lower():
+        return 'iPhone'
+    elif 'mac os' in os_version.lower():
+        return 'Mac'
+    elif 'linux' in os_version.lower():
+        return 'PC/Linux'
+    elif 'windows' in os_version.lower():
+        return 'PC/Windows'
+    else:
+        return 'Desconhecido'   
+    
 
 def scan_ports(url, ports):
     try:
@@ -465,7 +525,29 @@ while True:
         print("\n\n")
     elif command == "ss -e -M":
         metasploit_scan()
+    elif command == "ss --w -I":
+        ip_local = obter_ip_local()
+        if ip_local:
+            print(f"IP da rede Wi-Fi: {ip_local}")
+        else:
+            print("Falha ao obter o IP da rede Wi-Fi.")
+            print("Outras funcionalidades do comando 'ss --w -I':")
+            print("1. Obter todos os IPs conectados na rede Wi-Fi.")
+            print("2. Exibir o sistema operacional, versão do SO, latitude e longitude para cada IP.")
+            print("3. Identificar se o dispositivo é um celular, PC, notebook, etc.")
+            print("Buscando IPs conectados na rede Wi-Fi...")
+        wifi_ips = get_wifi_ips()
 
+
+
+        if wifi_ips:
+            print("\nIPs conectados na rede Wi-Fi:\n")
+            for ip in wifi_ips:
+                os_version = get_os_version(ip)
+                device_type = get_device_type(os_version)
+                print(f"IP: {ip} | Sistema Operacional: {os_version} | Tipo de Dispositivo: {device_type}\n")
+        else:
+            print("Nenhum dispositivo encontrado na rede Wi-Fi.")
 
 
 
