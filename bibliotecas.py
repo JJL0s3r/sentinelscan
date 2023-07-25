@@ -11,7 +11,23 @@ libraries = [
     'importlib',
     'subprocess',
     'psutil',
-    'subprocess'
+    'ipwhois',
+    'nmap',
+    'netifaces',
+    'scapy',
+    'IPWhois',
+    'scapy.all',
+    'ARP',
+    'Ether',
+    'srp',
+    'time',
+    'BeautifulSoup',
+    'bs4',
+    'urllib.parse',
+    'urlparse',
+    'parse_qs',
+    'quote',
+    
 ]
 
 # Função para instalar ou verificar se a biblioteca está instalada
