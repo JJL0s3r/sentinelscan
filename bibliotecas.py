@@ -27,6 +27,7 @@ libraries = [
     'urlparse',
     'parse_qs',
     'quote',
+    'colorama',
     
 ]
 
