@@ -10,95 +10,54 @@ from ipwhois import IPWhois
 import nmap
 import netifaces
 from scapy.all import ARP, Ether, srp
+import scapy.all as scapy
+import colorama
+from colorama import Fore, Style
 
+colorama.init()
+
+# Renderizar o banner com pyfiglet
 text = "Sentinel  Scan"
 font = pyfiglet.Figlet()
-
 banner = font.renderText(text)
-print(banner)
+
+# Adicionar cor ao banner
+banner_colored = f"{Fore.RED}{Style.BRIGHT}{banner}{Style.RESET_ALL}"
+
+print(banner_colored)
 
 
 # Exibe os comandos disponíveis
 def show_commands():
+    colorama.init()
+
     print("Comandos disponíveis:\n")
-    print("'ss' or 'sentinel scan' - Exibir tela inicial\n")
-    print("'commands' - Exibir comandos disponíveis'\n")
-    print("'ss ip' - Obter o IP do servidor\n")
-    print("'ss whois' - Realizar WHOIS\n")
-    print("'ss -p' - Escanear todas as portas\n")
-    print("'ss -x' - Verificar vulnerabilidade de XSS\n")
-    print("'ss -s' - Verificar vulnerabilidade de SQL injection\n")
-    print("'ss -e -M' - Explorar vulnerabilidade (SQLi)\n")
-    print("'ss -i' - Verificar vulnerabilidade de IDOR\n")
-    print("'ss -v' - Verificar se há vulnerabilidade XSS, IDOR e SQL injection\n")
-    print("'ss --w -I' - Obter todos os IPs conectados na rede Wi-Fi e informações dos dispositivos\n")
-    print("'ss dir -w (wordlist)' - Testar possíveis diretórios do site usando uma wordlist\n")
-    print("'ss dir -p' - Testar possíveis diretórios pré-definidos\n")
-    print("'info' - Mostrar informações sobre o programa\n")
-    print("'clear' - Limpar a tela\n")
-    print("'exit' - Sair\n\n\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss{Style.RESET_ALL}' or '{Fore.RED}{Style.BRIGHT}sentinel scan{Style.RESET_ALL}' - Exibir tela inicial\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}commands{Style.RESET_ALL}' - Exibir comandos disponíveis'\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss ip{Style.RESET_ALL}' - Obter o IP do servidor\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss whois{Style.RESET_ALL}' - Realizar WHOIS\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss -p{Style.RESET_ALL}' - Escanear todas as portas\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss -x{Style.RESET_ALL}' - Verificar vulnerabilidade de XSS\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss -s{Style.RESET_ALL}' - Verificar vulnerabilidade de SQL injection\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss -e -M{Style.RESET_ALL}' - Explorar vulnerabilidade (SQLi)\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss -i{Style.RESET_ALL}' - Verificar vulnerabilidade de IDOR\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss -v{Style.RESET_ALL}' - Verificar se há vulnerabilidade XSS, IDOR e SQL injection\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss dir -w (wordlist){Style.RESET_ALL}' - Testar possíveis diretórios do site usando uma wordlist\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}ss dir -p{Style.RESET_ALL}' - Testar possíveis diretórios pré-definidos\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}info{Style.RESET_ALL}' - Mostrar informações sobre o programa\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}clear{Style.RESET_ALL}' - Limpar a tela\n")
+    print(f"'{Fore.RED}{Style.BRIGHT}exit{Style.RESET_ALL}' - Sair\n\n\n")
     
     print("Se caso na hora de fazer o scan, der algum erro quando você informa a url, tente iniciar o script novamente e colocar sem 'http' ou 'https' \n")
 
 show_commands()
 
 
-def obter_ip_local():
-    try:
-        nome_do_host = socket.gethostname()
-        ip_local = socket.gethostbyname(nome_do_host)
-        return ip_local
-    except Exception as endereco:
-        print(f"Erro ao obter o endereço IP local: {endereco}")
-        return None
+def criado_por():
+    colorama.init()
+    print(f"Desenvolvido por: {Fore.RED}{Style.BRIGHT}JJL0s3r{Style.RESET_ALL} ou {Fore.RED}{Style.BRIGHT}Daniel Araujo{Style.RESET_ALL}")
+criado_por()
 
-def get_wifi_ips():
-    try:
-        # Obtém o endereço IP local da rede Wi-Fi
-        iface = netifaces.gateways()['default'][netifaces.AF_INET][1]
-        ip = netifaces.ifaddresses(iface)[netifaces.AF_INET][0]['addr']
-
-        # Faz uma varredura na rede para encontrar os IPs dos dispositivos conectados
-        nm = nmap.PortScanner()
-        nm.scan(hosts=f"{ip}/24", arguments='-F')  # Escaneia a rede usando apenas as 100 portas mais comuns
-        hosts_list = [(x, nm[x]['status']['state']) for x in nm.all_hosts()]  # Lista de tuplas (IP, status)
-
-        # Filtra apenas os IPs que estão com status 'up'
-        up_hosts = [ip for ip, status in hosts_list if status == 'up']
-
-        return up_hosts
-    except Exception as e:
-        print(f"Ocorreu um erro ao obter os IPs da rede Wi-Fi: {e}")
-        return []
-
-def get_os_version(ip):
-    try:
-        # Faz uma consulta WHOIS para obter informações do IP
-        obj = IPWhois(ip)
-        results = obj.lookup_rdap()
-
-        # Obtém informações do sistema operacional e a versão
-        os_version = results.get('asn_description', 'Desconhecido')
-        return os_version
-    except Exception as e:
-        print(f"Ocorreu um erro ao obter informações do sistema operacional: {e}")
-        return 'Desconhecido'
-
-def get_device_type(os_version):
-    # Algumas palavras-chave para identificar o tipo de dispositivo
-    if 'android' in os_version.lower():
-        return 'Celular'
-    elif 'iphone' in os_version.lower():
-        return 'iPhone'
-    elif 'mac os' in os_version.lower():
-        return 'Mac'
-    elif 'linux' in os_version.lower():
-        return 'PC/Linux'
-    elif 'windows' in os_version.lower():
-        return 'PC/Windows'
-    else:
-        return 'Desconhecido'   
-    
 
 def scan_ports(url, ports):
     try:
@@ -471,7 +430,37 @@ def check_idor(url):
             print("Nenhuma vulnerabilidade de IDOR encontrada.")
     except Exception as e:
         print(f"Ocorreu um erro inesperado: {e}")
-        
+
+
+def get_ip_info(ip_address):
+    url = f"http://ipinfo.io/{ip_address}/json"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        return None
+
+def print_ip_info(ip_info):
+    if ip_info:
+        print("IP Address:", ip_info.get("ip", "N/A"))
+        print("Anycast:", ip_info.get("anycast", "N/A"))
+        print("Hostname:", ip_info.get("hostname", "N/A"))
+        print("City:", ip_info.get("city", "N/A"))
+        print("Region:", ip_info.get("region", "N/A"))
+        print("Country:", ip_info.get("country", "N/A"))
+        print("Flag:", ip_info.get("country_flag_emoji", "N/A"))
+        print("Currency:", ip_info.get("currency", "N/A"))
+        print("Location:", ip_info.get("loc", "N/A"))
+        print("Organization:", ip_info.get("org", "N/A"))
+        print("Postal:", ip_info.get("postal", "N/A"))
+        print("Timezone:", ip_info.get("timezone", "N/A"))
+    else:
+        print("Informações do IP não encontradas.")
+
+
+
 
 # Loop infinito para continuar pedindo comandos
 while True:
@@ -502,10 +491,12 @@ while True:
     elif command == "ss":
         print(banner)
         show_commands()
+        criado_por()
 
     elif command == "sentinel scan":
         print(banner)
         show_commands()
+        criado_por()
 
     elif command == "commands":
         show_commands()
@@ -525,30 +516,10 @@ while True:
         print("\n\n")
     elif command == "ss -e -M":
         metasploit_scan()
-    elif command == "ss --w -I":
-        ip_local = obter_ip_local()
-        if ip_local:
-            print(f"IP da rede Wi-Fi: {ip_local}")
-        else:
-            print("Falha ao obter o IP da rede Wi-Fi.")
-            print("Outras funcionalidades do comando 'ss --w -I':")
-            print("1. Obter todos os IPs conectados na rede Wi-Fi.")
-            print("2. Exibir o sistema operacional, versão do SO, latitude e longitude para cada IP.")
-            print("3. Identificar se o dispositivo é um celular, PC, notebook, etc.")
-            print("Buscando IPs conectados na rede Wi-Fi...")
-        wifi_ips = get_wifi_ips()
-
-
-
-        if wifi_ips:
-            print("\nIPs conectados na rede Wi-Fi:\n")
-            for ip in wifi_ips:
-                os_version = get_os_version(ip)
-                device_type = get_device_type(os_version)
-                print(f"IP: {ip} | Sistema Operacional: {os_version} | Tipo de Dispositivo: {device_type}\n")
-        else:
-            print("Nenhum dispositivo encontrado na rede Wi-Fi.")
-
+    elif command == "ss -ip --if":
+            ip_address = input("Digite o endereço IP para consulta: ")
+            ip_info = get_ip_info(ip_address)
+            print_ip_info(ip_info)
 
 
     elif command == "clear":
